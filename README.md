@@ -1,3 +1,6 @@
+# udacity-leitura
+Aplicativo para a módulo de "React and Redux" do nanodegree de React da Udacity
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
