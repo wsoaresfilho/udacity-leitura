@@ -5,10 +5,13 @@
   "dependencies": {
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
+    "react-bootstrap": "^0.31.5",
     "react-dom": "^16.0.0",
     "react-router": "^4.2.0",
     "react-scripts": "1.0.15",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "redux-form": "^7.1.2",
+    "redux-thunk": "^2.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
