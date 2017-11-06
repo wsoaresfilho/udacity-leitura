@@ -59,6 +59,27 @@ export const voteOnComment = (id, option) =>
   }).then(res => res.json())
     .then(data => data)
 
+export const createComment = (comment) =>
+  fetch(`${api}/comments`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(comment)
+  }).then(res => res.json())
+    .then(data => data)
+
+export const deleteComment = (id) =>
+  fetch(`${api}/comments/${id}`, {
+    method: 'DELETE',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    }
+  }).then(res => res.json())
+    .then(data => data)
+
 
 
 export const get = (bookId) =>

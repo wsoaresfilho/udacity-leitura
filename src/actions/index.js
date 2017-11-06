@@ -11,6 +11,8 @@ export const DELETE_POST = 'DELETE_POST'
 export const VOTE_POST = 'VOTE_POST'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
 export const EDIT_POST = 'EDIT_POST'
+export const ADD_COMMENT = 'ADD_COMMENT'
+export const DELETE_COMMENT = 'DELETE_COMMENT'
 
 export function getAllCategories(categories) {
   return {
@@ -119,22 +121,37 @@ export function voteComment( comment ) {
 export function sendVoteCommentData(id, option) {
   return (dispatch) => {    
     API.voteOnComment(id, option).then(
-      (response) => dispatch(voteComment(response)
-    ))
+      (response) => dispatch(voteComment(response))
+    )
   }
 }
 
-export function addPost( post ) {
+export function addComment( comment ) {
   return {
-    type: ADD_POST,
-    newPost: post
+    type: ADD_COMMENT,
+    comment
   }
 }
 
-export function deletePost({ day, meal}) {
+export function sendNewCommentData(comment) {
+  return (dispatch) => {    
+    API.createComment(comment).then(
+      (response) => dispatch(addComment(response))
+    )
+  }
+}
+
+export function deleteComment(comment) {
   return {
-    type: DELETE_POST,
-    day,
-    meal
+    type: DELETE_COMMENT,
+    comment
+  }
+}
+
+export function sendDeleteCommentData(id) {
+  return (dispatch) => {    
+    API.deleteComment(id).then(
+      (response) => dispatch(deleteComment(response))
+    )
   }
 }

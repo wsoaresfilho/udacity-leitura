@@ -11,7 +11,9 @@ import {
   VOTE_POST,
   EDIT_POST,
   GET_COMMENTS,
-  VOTE_COMMENT
+  VOTE_COMMENT,
+  ADD_COMMENT,
+  DELETE_COMMENT
 } from '../actions'
 
 function categories (state={}, action) {
@@ -93,6 +95,18 @@ function comments (state={}, action) {
             comment.voteScore = action.comment.voteScore
           }
           return comment
+        })
+      }
+    case ADD_COMMENT :
+      return {
+        ...state,
+        comments: state.comments.concat(action.comment)
+      }
+    case DELETE_COMMENT :
+      return {
+        ...state,
+        comments: state.comments.filter((c) => {
+          return c.id !== action.comment.id
         })
       }
     default :
