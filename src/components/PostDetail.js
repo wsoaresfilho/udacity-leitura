@@ -5,30 +5,21 @@ import { Link } from 'react-router-dom'
 import { VOTE_UP, VOTE_DOWN } from '../utilities/constants'
 import Modal from 'react-modal'
 import UUID from 'uuid'
+import Comment from './Comment'
 import 
 {  
   fetchCommentsFromPostData,
   fetchPostData,
-  sendVoteCommentData,
+  sendDeletePostData,
   sendNewCommentData,
-  sendDeleteCommentData
+  sendVotePostData,
+  openCommentModal,
+  closeCommentModal
 } from '../actions'
 
 class PostDetail extends Component {
-  state = {
-    commentModalOpen: false
-  }
-  closeCommentModal = () => {
-    this.setState(() => ({
-      commentModalOpen: false
-    }))
-  }
-  openCommentModal = () => {
-    this.setState(() => ({
-      commentModalOpen: true
-    }))
-  }
-  submitModal = (e) => {
+
+  submitCommentModal = (e) => {
     e.preventDefault()
     console.log("Comentario enviado")
     console.log(e.target.author.value)
@@ -43,14 +34,18 @@ class PostDetail extends Component {
       parentDeleted: false
     }
     this.props.addComment(commentData)
-    this.closeCommentModal()
+    this.props.closeCommentModal()
   }
 
   static propTypes = {
     post: PropTypes.object,
     comments: PropTypes.array,
+    isCommentModalOpen: PropTypes.bool,
     loadPost: PropTypes.func.isRequired,
-    loadComments: PropTypes.func.isRequired
+    loadComments: PropTypes.func.isRequired,
+    openCommentModal: PropTypes.func.isRequired,
+    closeCommentModal: PropTypes.func.isRequired,
+    deletePost: PropTypes.func.isRequired
   }
   
   componentWillMount() {
@@ -59,42 +54,59 @@ class PostDetail extends Component {
   }
 
   render() {
-    const { post, comments, history } = this.props
+    const { 
+      post,
+      comments,
+      history,
+      isCommentModalOpen,
+      votePostUp,
+      votePostDown,
+      deletePost,
+      closeCommentModal,
+      openCommentModal
+    } = this.props
 
     return (
       <div>
-        <div>
-          <p>{post && post.title }</p>
-        </div>
-
-        <div>
-            {comments && 
-              comments.map((comment) => (
-                <div key={comment.id}>
-                  <ul>
-                    <li>Author: {comment.author}</li>
-                    <li>Body: {comment.body}</li>
-                    <li>Score: {comment.voteScore}</li>
-                  </ul>
-                  <button type="button" onClick={() => this.props.voteUp(comment.id)}>Vote Up</button>
-                  <button type="button" onClick={() => this.props.voteDown(comment.id)}>Vote Down</button>
-                  <button type="button" onClick={() => this.props.deleteComment(comment.id)}>Delete</button>                 
-                </div>
-            ))}
-        </div>
-        <button type="button" onClick={() => this.openCommentModal()}>New Comment</button>
+        {post.id && (
+          <div>
+            <div>
+              <p>Title: {post.title}</p>
+              <p>Category: {post.category}</p>
+              <p>Number of Comments: {post.commentCount}</p>
+              <p>Score: {post.voteScore}</p>
+              <p>Author: {post.author}</p>
+              <p>Body: {post.body}</p>
+              <button type="button" onClick={() => votePostUp(post.id)}>Vote Up</button>
+              <button type="button" onClick={() => votePostDown(post.id)}>Vote Down</button>
+              <button type="button" onClick={() => deletePost(post.id)}>Delete Post</button>
+            </div>
+            <button type="button" onClick={() => openCommentModal()}>New Comment</button>
+            <hr/>
+            <div>
+              {comments && 
+                comments.map((comment) => (
+                  <Comment id={comment.id} key={comment.id}></Comment>
+              ))}
+            </div>
+          </div>
+        )}
+        {!post.id && (
+          <p>There´s no post with this id.</p>
+        )}
+        
         <br/>
         <Link onClick={() => history.goBack()} to="">Voltar</Link>
 
         <Modal
           className='modal'
           overlayClassName='overlay'
-          isOpen={this.state.commentModalOpen}
-          onRequestClose={this.closeCommentModal}
-          contentLabel='Modal'
+          isOpen={isCommentModalOpen}
+          onRequestClose={closeCommentModal}
+          contentLabel='CommentModal'
         >
           <p>New Comment</p>
-          <form onSubmit={this.submitModal}>
+          <form onSubmit={this.submitCommentModal}>
           
             <label>Author</label>
             <input type="text" name="author"></input>
@@ -102,10 +114,11 @@ class PostDetail extends Component {
             <label>Comment</label>
             <textarea name="body"></textarea>
             <input type="hidden" name="parentId" value={post && post.id}></input>
-            <button type="button" onClick={() => this.closeCommentModal()}>Close</button>
+            <button type="button" onClick={() => closeCommentModal()}>Close</button>
             <button type="submit">Submit</button>
           </form>
         </Modal>
+
       </div>
     )
   }
@@ -114,7 +127,9 @@ class PostDetail extends Component {
 function mapStateToProps({ posts, comments }) {
   return {
     post: posts.post,
-    comments: comments.comments
+    comments: comments.comments,
+    isCommentModalOpen: comments.isModalOpen,
+    isPostModalOpen: posts.isModalOpen
   }
 }
 
@@ -122,10 +137,12 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     loadPost: () => dispatch(fetchPostData(ownProps.id)),
     loadComments: () => dispatch(fetchCommentsFromPostData(ownProps.id)),
-    voteUp: (id) => dispatch(sendVoteCommentData(id, VOTE_UP)),
-    voteDown: (id) => dispatch(sendVoteCommentData(id, VOTE_DOWN)),
+    votePostUp: (id) => dispatch(sendVotePostData(id, VOTE_UP)),
+    votePostDown: (id) => dispatch(sendVotePostData(id, VOTE_DOWN)),
     addComment: (comment) => dispatch(sendNewCommentData(comment)),
-    deleteComment: (id) => dispatch(sendDeleteCommentData(id))
+    deletePost: (id) => dispatch(sendDeletePostData(id)),
+    openCommentModal: () => dispatch(openCommentModal()),
+    closeCommentModal: () => dispatch(closeCommentModal())
   }
 }
 

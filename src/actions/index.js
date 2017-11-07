@@ -8,11 +8,16 @@ export const GET_POSTS_FROM_CATEGORY = 'GET_POSTS_FROM_CATEGORY'
 export const GET_COMMENTS = 'GET_COMMENTS'
 export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
-export const VOTE_POST = 'VOTE_POST'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
-export const EDIT_POST = 'EDIT_POST'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
+export const OPEN_COMMENT_MODAL = 'OPEN_COMMENT_MODAL'
+export const CLOSE_COMMENT_MODAL = 'CLOSE_COMMENT_MODAL'
+export const VOTE_POST = 'VOTE_POST'
+export const EDIT_POST = 'EDIT_POST'
+export const OPEN_POST_MODAL = 'OPEN_POST_MODAL'
+export const CLOSE_POST_MODAL = 'CLOSE_POST_MODAL'
+export const EDIT_COMMENT = 'EDIT_COMMENT'
 
 export function getAllCategories(categories) {
   return {
@@ -152,6 +157,90 @@ export function sendDeleteCommentData(id) {
   return (dispatch) => {    
     API.deleteComment(id).then(
       (response) => dispatch(deleteComment(response))
+    )
+  }
+}
+
+export function openCommentModal() {
+  return {
+    type: OPEN_COMMENT_MODAL
+  }
+}
+
+export function closeCommentModal() {
+  return {
+    type: CLOSE_COMMENT_MODAL
+  }
+}
+
+export function deletePost(post) {
+  return {
+    type: DELETE_POST,
+    post
+  }
+}
+
+export function sendDeletePostData(id) {
+  return (dispatch) => {    
+    API.deletePost(id).then(
+      (response) => dispatch(deletePost(response))
+    )
+  }
+}
+
+export function openPostModal() {
+  return {
+    type: OPEN_POST_MODAL
+  }
+}
+
+export function closePostModal() {
+  return {
+    type: CLOSE_POST_MODAL
+  }
+}
+
+export function addPost( post ) {
+  return {
+    type: ADD_POST,
+    post
+  }
+}
+
+export function sendNewPostData(post) {
+  return (dispatch) => {    
+    API.createPost(post).then(
+      (response) => dispatch(addPost(response))
+    )
+  }
+}
+
+export function editPost( post ) {
+  return {
+    type: EDIT_POST,
+    post
+  }
+}
+
+export function updatePostData(id, data) {
+  return (dispatch) => {    
+    API.updatePost(id, data).then(
+      (response) => dispatch(editPost(response))
+    )
+  }
+}
+
+export function editComment( comment ) {
+  return {
+    type: EDIT_COMMENT,
+    comment
+  }
+}
+
+export function updateCommentData(id, data) {
+  return (dispatch) => {    
+    API.updateComment(id, data).then(
+      (response) => dispatch(editComment(response))
     )
   }
 }

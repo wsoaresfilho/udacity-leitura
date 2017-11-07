@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import logo from '../images/logo.svg'
 import '../css/App.css'
 import Home from '../components/Home'
 import Category from '../components/Category'
@@ -12,10 +11,6 @@ class App extends Component {
     return (
 
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
 
         <Switch>
           <Route exact path='/' render={() => (

@@ -13,7 +13,12 @@ import {
   GET_COMMENTS,
   VOTE_COMMENT,
   ADD_COMMENT,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  CLOSE_COMMENT_MODAL,
+  OPEN_COMMENT_MODAL,
+  CLOSE_POST_MODAL,
+  OPEN_POST_MODAL,
+  EDIT_COMMENT
 } from '../actions'
 
 function categories (state={}, action) {
@@ -34,7 +39,13 @@ function categories (state={}, action) {
   }
 }
 
-function posts (state={}, action) {
+const initialPostState = {
+  allPosts: [],
+  post: {},
+  isModalOpen: false
+}
+
+function posts (state=initialPostState, action) {
   switch (action.type) {
     case GET_ALL_POSTS :
       return {
@@ -65,22 +76,46 @@ function posts (state={}, action) {
     case ADD_POST :
       return {
         ...state,
-        posts: state.posts.concat([action.newPost])
+        allPosts: state.allPosts.concat(action.post)
       }
-    // case DELETE_POST :
-    //   return {
-    //     ...state,
-    //     [day]: {
-    //       ...state[day],
-    //       [meal]: null,
-    //     }
-    //   }
+    case EDIT_POST :
+      return {
+        ...state,
+        allPosts: state.allPosts.map((post) => {
+          if(post.id === action.post.id) {
+            post = action.post
+          }
+          return post
+        })
+      }
+    case DELETE_POST :
+      return {
+        ...state,
+        allPosts: state.allPosts.filter((p) => {
+          return p.id !== action.post.id
+        })
+      }
+    case OPEN_POST_MODAL :
+      return {
+        ...state,
+        isModalOpen : true
+      }
+    case CLOSE_POST_MODAL :
+      return {
+        ...state,
+        isModalOpen : false
+      }
     default :
       return state
   }
 }
 
-function comments (state={}, action) {
+const initialCommentState = {
+  comments: [],
+  isModalOpen: false
+}
+
+function comments (state=initialCommentState, action) {
   switch (action.type) {
     case GET_COMMENTS :
       return {
@@ -108,6 +143,26 @@ function comments (state={}, action) {
         comments: state.comments.filter((c) => {
           return c.id !== action.comment.id
         })
+      }
+    case EDIT_COMMENT :
+      return {
+        ...state,
+        comments: state.comments.map((comment) => {
+          if(comment.id === action.comment.id) {
+            comment = action.comment
+          }
+          return comment
+        })
+      }
+    case OPEN_COMMENT_MODAL :
+      return {
+        ...state,
+        isModalOpen : true
+      }
+    case CLOSE_COMMENT_MODAL :
+      return {
+        ...state,
+        isModalOpen : false
       }
     default :
       return state

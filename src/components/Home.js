@@ -19,6 +19,7 @@ class Home extends Component {
     return (
       <div>
         <CategoryList></CategoryList>
+        
         <ul>  
           {this.props.posts &&
           this.props.posts.map((post) => (
