@@ -11,13 +11,18 @@ export const DELETE_POST = 'DELETE_POST'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
-export const OPEN_COMMENT_MODAL = 'OPEN_COMMENT_MODAL'
-export const CLOSE_COMMENT_MODAL = 'CLOSE_COMMENT_MODAL'
+export const OPEN_NEW_COMMENT_MODAL = 'OPEN_NEW_COMMENT_MODAL'
+export const CLOSE_NEW_COMMENT_MODAL = 'CLOSE_NEW_COMMENT_MODAL'
+export const OPEN_EDIT_COMMENT_MODAL = 'OPEN_EDIT_COMMENT_MODAL'
+export const CLOSE_EDIT_COMMENT_MODAL = 'CLOSE_EDIT_COMMENT_MODAL'
 export const VOTE_POST = 'VOTE_POST'
 export const EDIT_POST = 'EDIT_POST'
-export const OPEN_POST_MODAL = 'OPEN_POST_MODAL'
-export const CLOSE_POST_MODAL = 'CLOSE_POST_MODAL'
+export const OPEN_EDIT_POST_MODAL = 'OPEN_EDIT_POST_MODAL'
+export const OPEN_NEW_POST_MODAL = 'OPEN_NEW_POST_MODAL'
+export const CLOSE_NEW_POST_MODAL = 'CLOSE_NEW_POST_MODAL'
+export const CLOSE_EDIT_POST_MODAL = 'CLOSE_EDIT_POST_MODAL'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
+export const SORT_POSTS = 'SORT_POSTS'
 
 export function getAllCategories(categories) {
   return {
@@ -161,15 +166,28 @@ export function sendDeleteCommentData(id) {
   }
 }
 
-export function openCommentModal() {
+export function openEditCommentModal(comment) {
   return {
-    type: OPEN_COMMENT_MODAL
+    type: OPEN_EDIT_COMMENT_MODAL,
+    comment
   }
 }
 
-export function closeCommentModal() {
+export function closeEditCommentModal() {
   return {
-    type: CLOSE_COMMENT_MODAL
+    type: CLOSE_EDIT_COMMENT_MODAL
+  }
+}
+
+export function openNewCommentModal() {
+  return {
+    type: OPEN_NEW_COMMENT_MODAL
+  }
+}
+
+export function closeNewCommentModal() {
+  return {
+    type: CLOSE_NEW_COMMENT_MODAL
   }
 }
 
@@ -188,15 +206,28 @@ export function sendDeletePostData(id) {
   }
 }
 
-export function openPostModal() {
+export function openEditPostModal(post) {
   return {
-    type: OPEN_POST_MODAL
+    type: OPEN_EDIT_POST_MODAL,
+    post
   }
 }
 
-export function closePostModal() {
+export function openNewPostModal() {
   return {
-    type: CLOSE_POST_MODAL
+    type: OPEN_NEW_POST_MODAL
+  }
+}
+
+export function closeEditPostModal() {
+  return {
+    type: CLOSE_EDIT_POST_MODAL
+  }
+}
+
+export function closeNewPostModal() {
+  return {
+    type: CLOSE_NEW_POST_MODAL
   }
 }
 
@@ -242,5 +273,12 @@ export function updateCommentData(id, data) {
     API.updateComment(id, data).then(
       (response) => dispatch(editComment(response))
     )
+  }
+}
+
+export function sortPosts( sortby ) {
+  return {
+    type: SORT_POSTS,
+    sortby
   }
 }

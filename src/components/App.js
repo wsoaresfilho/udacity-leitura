@@ -6,10 +6,10 @@ import Category from '../components/Category'
 import PostDetail from '../components/PostDetail'
  
 class App extends Component {
+
   render() {
 
     return (
-
       <div className="App">
 
         <Switch>
@@ -18,9 +18,7 @@ class App extends Component {
           )}/>
 
           <Route exact path='/:category' render={({match}) => (
-            <div>
-              <Category category={match.params.category}></Category>
-            </div>
+            <Category category={match.params.category}></Category>
           )} />
 
           <Route path='/:category/:id' render={({match, history}) => (
@@ -29,7 +27,7 @@ class App extends Component {
 
         </Switch>
       </div>
-    );
+    )
   }
 }
 

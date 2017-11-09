@@ -2,13 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import Modal from 'react-modal'
+
 import { 
   sendVotePostData, 
-  sendDeletePostData, 
-  updatePostData,
-  closePostModal,
-  openPostModal
+  sendDeletePostData,
+  openEditPostModal
 } from '../actions'
 import { VOTE_UP, VOTE_DOWN } from '../utilities/constants'
 
@@ -17,19 +15,7 @@ class Post extends Component {
     posts: PropTypes.array.isRequired,
     voteDown: PropTypes.func.isRequired,
     voteUp: PropTypes.func.isRequired,
-    deletePost: PropTypes.func.isRequired,
-    isPostModalOpen: PropTypes.bool.isRequired
-  }
-
-  submitPostModal = (e) => {
-    e.preventDefault()
-    console.log("Post editado")
-    const postData = {
-      body: e.target.body.value,
-      title: e.target.title.value
-    }
-    this.props.editPost(e.target.id.value, postData)
-    this.props.closePostModal()
+    deletePost: PropTypes.func.isRequired
   }
 
   render() {
@@ -38,8 +24,6 @@ class Post extends Component {
     })
 
     const {
-      closePostModal,
-      isPostModalOpen,
       voteDown,
       voteUp,
       deletePost,
@@ -53,30 +37,13 @@ class Post extends Component {
         <p>Number of Comments: {post.commentCount}</p>
         <p>Score: {post.voteScore}</p>
         <p>Author: {post.author}</p>
+        <p>Date: {new Date(post.timestamp).toLocaleDateString()}</p>
         <button type="button" onClick={() => voteUp(post.id)}>Vote Up</button>
         <button type="button" onClick={() => voteDown(post.id)}>Vote Down</button>
         <button type="button" onClick={() => deletePost(post.id)}>Delete Post</button>
-        <button type="button" onClick={() => openPostModal()}>Edit Post</button>
+        <button type="button" onClick={() => openPostModal(post)}>Edit Post</button>
         <hr></hr>
-        <Modal
-          className='modal'
-          overlayClassName='overlay'
-          isOpen={isPostModalOpen}
-          onRequestClose={closePostModal}
-          contentLabel='postModal'
-        >
-          <p>Edit Post</p>
-          <form onSubmit={this.submitPostModal}>
-            <label>Title</label>
-            <input type="hidden" name="id" value={post.id}></input>
-            <input type="text" name="title" defaultValue={post.title}></input>
-            <br/>
-            <label>Body</label>
-            <textarea name="body" defaultValue={post.body}></textarea>
-            <button type="button" onClick={() => closePostModal()}>Close</button>
-            <button type="submit">Submit</button>
-          </form>
-        </Modal>
+        
       </div>
     )
   }
@@ -84,8 +51,7 @@ class Post extends Component {
 
 function mapStateToProps({ posts }) {
   return {
-    posts: posts.allPosts,
-    isPostModalOpen: posts.isModalOpen
+    posts: posts.allPosts
   }
 }
 
@@ -94,9 +60,7 @@ function mapDispatchToProps(dispatch) {
     voteUp: (id) => dispatch(sendVotePostData(id, VOTE_UP)),
     voteDown: (id) => dispatch(sendVotePostData(id, VOTE_DOWN)),
     deletePost: (id) => dispatch(sendDeletePostData(id)),
-    editPost: (id, data) => dispatch(updatePostData(id, data)),
-    openPostModal: () => dispatch(openPostModal()),
-    closePostModal: () => dispatch(closePostModal()),
+    openPostModal: (p) => dispatch(openEditPostModal(p))
   }
 }
 

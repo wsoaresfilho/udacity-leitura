@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
-
+import { SORT_BY_DATE } from '../utilities/constants'
+import sortBy from 'sort-by'
 import {
   GET_CATEGORIES,
   SELECT_CATEGORY,
@@ -14,11 +15,16 @@ import {
   VOTE_COMMENT,
   ADD_COMMENT,
   DELETE_COMMENT,
-  CLOSE_COMMENT_MODAL,
-  OPEN_COMMENT_MODAL,
-  CLOSE_POST_MODAL,
-  OPEN_POST_MODAL,
-  EDIT_COMMENT
+  CLOSE_EDIT_COMMENT_MODAL,
+  OPEN_EDIT_COMMENT_MODAL,
+  CLOSE_NEW_COMMENT_MODAL,
+  OPEN_NEW_COMMENT_MODAL,
+  CLOSE_EDIT_POST_MODAL,
+  OPEN_EDIT_POST_MODAL,
+  OPEN_NEW_POST_MODAL,
+  CLOSE_NEW_POST_MODAL,
+  EDIT_COMMENT,
+  SORT_POSTS
 } from '../actions'
 
 function categories (state={}, action) {
@@ -42,7 +48,9 @@ function categories (state={}, action) {
 const initialPostState = {
   allPosts: [],
   post: {},
-  isModalOpen: false
+  isEditModalOpen: false,
+  isNewModalOpen: false,
+  sortBy: SORT_BY_DATE
 }
 
 function posts (state=initialPostState, action) {
@@ -50,7 +58,7 @@ function posts (state=initialPostState, action) {
     case GET_ALL_POSTS :
       return {
         ...state,
-        allPosts: action.posts
+        allPosts: action.posts.sort(sortBy(state.sortBy))
       }
     case GET_POSTS_FROM_CATEGORY :
       return {
@@ -86,7 +94,8 @@ function posts (state=initialPostState, action) {
             post = action.post
           }
           return post
-        })
+        }),
+        post: action.post
       }
     case DELETE_POST :
       return {
@@ -95,15 +104,31 @@ function posts (state=initialPostState, action) {
           return p.id !== action.post.id
         })
       }
-    case OPEN_POST_MODAL :
+    case OPEN_EDIT_POST_MODAL :
       return {
         ...state,
-        isModalOpen : true
+        isEditModalOpen : true,
+        post: action.post
       }
-    case CLOSE_POST_MODAL :
+    case CLOSE_EDIT_POST_MODAL :
       return {
         ...state,
-        isModalOpen : false
+        isEditModalOpen : false
+      }
+    case OPEN_NEW_POST_MODAL :
+      return {
+        ...state,
+        isNewModalOpen : true
+      }
+    case CLOSE_NEW_POST_MODAL :
+      return {
+        ...state,
+        isNewModalOpen : false
+      }
+    case SORT_POSTS :
+      return {
+        ...state,
+        sortBy: action.sortby
       }
     default :
       return state
@@ -112,7 +137,9 @@ function posts (state=initialPostState, action) {
 
 const initialCommentState = {
   comments: [],
-  isModalOpen: false
+  comment: {},
+  isEditModalOpen: false,
+  isNewModalOpen: false
 }
 
 function comments (state=initialCommentState, action) {
@@ -154,15 +181,26 @@ function comments (state=initialCommentState, action) {
           return comment
         })
       }
-    case OPEN_COMMENT_MODAL :
+    case OPEN_NEW_COMMENT_MODAL :
       return {
         ...state,
-        isModalOpen : true
+        isNewModalOpen : true
       }
-    case CLOSE_COMMENT_MODAL :
+    case CLOSE_NEW_COMMENT_MODAL :
       return {
         ...state,
-        isModalOpen : false
+        isNewModalOpen : false
+      }
+    case OPEN_EDIT_COMMENT_MODAL :
+      return {
+        ...state,
+        comment: action.comment,
+        isEditModalOpen : true
+      }
+    case CLOSE_EDIT_COMMENT_MODAL :
+      return {
+        ...state,
+        isEditModalOpen : false
       }
     default :
       return state
