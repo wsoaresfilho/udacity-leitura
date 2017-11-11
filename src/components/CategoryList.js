@@ -11,7 +11,7 @@ class CategoryList extends Component {
     categories: PropTypes.array
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if(!this.props.categories) {
       this.props.loadCategories()
     }    

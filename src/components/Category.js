@@ -16,6 +16,7 @@ import {
 
 class Category extends Component {
   static propTypes = {
+    category: PropTypes.string,
     posts: PropTypes.array,
     loadPosts: PropTypes.func.isRequired,
     openNewPostModal: PropTypes.func.isRequired,
@@ -23,7 +24,7 @@ class Category extends Component {
     sortby: PropTypes.string.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadPosts()    
   }
 
