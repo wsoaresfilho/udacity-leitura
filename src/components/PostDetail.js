@@ -8,7 +8,7 @@ import PostModal from './PostModal'
 import CommentModal from './CommentModal'
 import sortBy from 'sort-by'
 import { SORT_BY_DATE } from '../utilities/constants'
-import { ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Row, Col, ButtonGroup, Button } from 'reactstrap'
+import { ListGroup, ListGroupItem, ListGroupItemHeading, Row, Col, ButtonGroup, Button } from 'reactstrap'
 import 
 {  
   fetchCommentsFromPostData,
@@ -62,7 +62,7 @@ class PostDetail extends Component {
                 <ListGroupItemHeading>
                   Post Title: <Link to={`/${post.category}/${post.id}`}>{post.title}</Link>
                 </ListGroupItemHeading>
-                <ListGroupItemText>
+                <div>
                   <Row>
                     <Col className="capitalize">Author: {post.author}</Col>
                     <Col className="capitalize">Category: {post.category}</Col>
@@ -89,14 +89,16 @@ class PostDetail extends Component {
                       </ButtonGroup>
                     </Col>
                   </Row>
-                </ListGroupItemText>
+                </div>
               </ListGroupItem>
             </ListGroup>
 
             <br/> <br/>
             <div>
-              <h4 className="center">Comments</h4>
-              {comments && 
+              {comments.length > 0 && (
+                <h4 className="center">Comments</h4>
+              )}
+              {comments.length > 0 && 
                 comments.sort(sortBy(SORT_BY_DATE)).map((comment) => (
                   <Comment id={comment.id} key={comment.id}></Comment>
               ))}
@@ -112,7 +114,7 @@ class PostDetail extends Component {
         
         <br/>
         
-        <Link onClick={() => history.goBack()} to="">Voltar</Link>
+        <Link onClick={() => history.goBack()} to="">Back</Link>
       </div>
     )
   }

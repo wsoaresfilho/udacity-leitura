@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Modal from 'react-modal'
 import UUID from 'uuid'
-import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap'
+import { validateForm } from '../utilities/helpers'
+import { Col, Button, Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap'
 import 
 {  
   sendNewCommentData,
@@ -14,6 +15,10 @@ import
 } from '../actions'
 
 class Comment extends Component {
+  state = {
+    invalid: false
+  }
+
   static propTypes = {
     comment: PropTypes.object,
     addComment: PropTypes.func.isRequired,
@@ -31,8 +36,12 @@ class Comment extends Component {
       timestamp: Date.now(),
       body: e.target.body.value
     }
-    this.props.editComment(e.target.id.value, commentData)
-    this.props.closeEditCommentModal()
+    if (validateForm(commentData)) {
+      this.props.editComment(e.target.id.value, commentData)
+      this.props.closeEditCommentModal()
+    } else {
+      this.setState({invalid: true})
+    }
   }
 
   submitNewCommentModal = (e) => {
@@ -49,8 +58,19 @@ class Comment extends Component {
       deleted: false,
       parentDeleted: false
     }
-    this.props.addComment(commentData)
-    this.props.closeNewCommentModal()
+    if (validateForm(commentData)) {
+      this.props.addComment(commentData)
+      this.props.closeNewCommentModal()
+    } else {
+      this.setState({invalid: true})
+    }  
+  }
+
+  checkIfEmpty = (e) => {
+    e.preventDefault()
+    if(e.target.value !== "") {
+      this.setState({invalid: false})
+    }
   }
 
   render() {
@@ -77,14 +97,21 @@ class Comment extends Component {
             <h4 className="center">Edit Comment</h4>
             <input type="hidden" name="id" value={comment.id}></input>
             <FormGroup row>
-              <Label for="body" sm={2}>Comment</Label>
+              <Label for="body" sm={2}>Comment*</Label>
               <Col sm={10}>
-                <Input type="textarea" name="body" id="body" defaultValue={comment.body}/>
+                <Input type="textarea" name="body" id="body" defaultValue={comment.body} onChange={this.checkIfEmpty}/>
+                <FormFeedback>*Required</FormFeedback>
+                {this.state.invalid && (
+                  <FormFeedback className="red">ERROR! Fill all the required inputs!</FormFeedback>
+                )} 
               </Col>
             </FormGroup>
             <FormGroup check row>
               <Col sm={{ size: 10, offset: 2 }}>
-                <Button onClick={() => closeEditCommentModal()}>Close</Button>
+                <Button onClick={() => {
+                    closeEditCommentModal()
+                    this.setState({invalid: false})
+                  }}>Close</Button>
                 <span>  </span>
                 <Button color="success">Submit</Button>
               </Col>
@@ -103,20 +130,27 @@ class Comment extends Component {
             <h4 className="center">New Comment</h4>
             <input type="hidden" name="parentId" value={post && post.id}></input>
             <FormGroup row>
-              <Label for="author" sm={2}>Author</Label>
+              <Label for="author" sm={2}>Author*</Label>
               <Col sm={10}>
-                <Input type="text" name="author" id="author"/>
+                <Input type="text" name="author" id="author" onChange={this.checkIfEmpty}/>
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Label for="body" sm={2}>Comment</Label>
+              <Label for="body" sm={2}>Comment*</Label>
               <Col sm={10}>
-                <Input type="textarea" name="body" id="body"/>
+                <Input type="textarea" name="body" id="body" onChange={this.checkIfEmpty}/>
+                <FormFeedback>*Required</FormFeedback>
+                {this.state.invalid && (
+                  <FormFeedback className="red">ERROR! Fill all the required inputs!</FormFeedback>
+                )} 
               </Col>
             </FormGroup>
             <FormGroup check row>
               <Col sm={{ size: 10, offset: 2 }}>
-                <Button onClick={() => closeNewCommentModal()}>Close</Button>
+                <Button onClick={() => {
+                    closeNewCommentModal()
+                    this.setState({invalid: false})
+                  }}>Close</Button>
                 <span>  </span>
                 <Button color="success">Submit</Button>
               </Col>

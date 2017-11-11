@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { VOTE_UP, VOTE_DOWN } from '../utilities/constants'
 import CommentModal from './CommentModal'
-import { ListGroup, ListGroupItem, ListGroupItemText, Row, Col, ButtonGroup, Button } from 'reactstrap'
+import { ListGroup, ListGroupItem, Row, Col, ButtonGroup, Button } from 'reactstrap'
 import 
 {  
   sendVoteCommentData,
@@ -38,7 +38,7 @@ class Comment extends Component {
           <div>            
             <ListGroup>
               <ListGroupItem>
-                <ListGroupItemText>
+                <div>
                   <Row>
                     <Col className="capitalize">Author: {comment.author}</Col>
                     <Col>Date: {new Date(comment.timestamp).toLocaleDateString()}</Col>
@@ -57,12 +57,12 @@ class Comment extends Component {
                     </Col>
                     <Col>
                       <ButtonGroup>
-                        <Button color="danger" onClick={() => deleteComment(comment.id)}>Delete Post</Button>
-                        <Button color="warning" onClick={() => openEditCommentModal(comment)}>Edit Post</Button>
+                        <Button color="danger" onClick={() => deleteComment(comment.id)}>Delete Comment</Button>
+                        <Button color="warning" onClick={() => openEditCommentModal(comment)}>Edit Comment</Button>
                       </ButtonGroup>
                     </Col>
                   </Row>
-                </ListGroupItemText>
+                </div>
               </ListGroupItem>
             </ListGroup>
 

@@ -66,7 +66,7 @@ class Category extends Component {
             <Post id={post.id} key={post.id}></Post>
         ))}
         <br/>
-        <Link className="center" to="/">Voltar</Link>
+        <Link className="center" to="/">Back</Link>
 
         <PostModal category={category}></PostModal>        
       </div>

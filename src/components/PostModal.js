@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Modal from 'react-modal'
 import UUID from 'uuid'
-import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap'
+import { validateForm } from '../utilities/helpers'
+import { Col, Button, Form, FormGroup, FormFeedback, Label, Input } from 'reactstrap'
 import { 
   closeEditPostModal,
   closeNewPostModal,
@@ -11,15 +12,22 @@ import {
 } from '../actions'
 
 class PostModal extends Component {
+  state = {
+    invalid: false
+  }
+
   submitEditPostModal = (e) => {
     e.preventDefault()
-    console.log("Post editado")
     const postData = {
       body: e.target.body.value,
       title: e.target.title.value
     }
-    this.props.editPost(e.target.id.value, postData)
-    this.props.closeEditPostModal()
+    if (validateForm(postData)) {
+      this.props.editPost(e.target.id.value, postData)
+      this.props.closeEditPostModal()
+    } else {
+      this.setState({invalid: true})
+    }
   }
 
   submitNewPostModal = (e) => {
@@ -32,8 +40,19 @@ class PostModal extends Component {
       title: e.target.title.value,
       category: this.props.category
     }
-    this.props.addPost(postData)
-    this.props.closeNewPostModal()
+    if (validateForm(postData)) {
+      this.props.addPost(postData)
+      this.props.closeNewPostModal()
+    } else {
+      this.setState({invalid: true})
+    }
+  }
+
+  checkIfEmpty = (e) => {
+    e.preventDefault()
+    if(e.target.value !== "") {
+      this.setState({invalid: false})
+    }
   }
   
   render() {
@@ -58,23 +77,30 @@ class PostModal extends Component {
             <h4 className="center">Edit Post</h4>
             <input type="hidden" name="id" value={post.id}></input>
             <FormGroup row>
-              <Label for="title" sm={2}>Title</Label>
+              <Label for="title" sm={2}>Title*</Label>
               <Col sm={10}>
-                <Input type="text" name="title" id="title" defaultValue={post.title}/>
+                <Input type="text" name="title" id="title" defaultValue={post.title} onChange={this.checkIfEmpty}/>
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Label for="body" sm={2}>Text</Label>
+              <Label for="body" sm={2}>Text*</Label>
               <Col sm={10}>
-                <Input type="textarea" name="body" id="body" defaultValue={post.body}/>
-              </Col>
+                <Input type="textarea" name="body" id="body" defaultValue={post.body} onChange={this.checkIfEmpty}/> 
+                <FormFeedback>*Required</FormFeedback>
+                {this.state.invalid && (
+                  <FormFeedback className="red">ERROR! Fill all the required inputs!</FormFeedback>
+                )}                
+              </Col>              
             </FormGroup>
             <FormGroup check row>
               <Col sm={{ size: 10, offset: 2 }}>
-                <Button onClick={() => closeEditPostModal()}>Close</Button>
+                <Button onClick={() => {
+                    closeEditPostModal()
+                    this.setState({invalid: false})
+                  }}>Close</Button>
                 <span>  </span>
                 <Button color="success">Submit</Button>
-              </Col>
+              </Col>              
             </FormGroup>
           </Form>
         </Modal>
@@ -89,29 +115,36 @@ class PostModal extends Component {
           <Form onSubmit={this.submitNewPostModal}>
             <h4 className="center">New Post</h4>
             <FormGroup row>
-              <Label for="title" sm={2}>Title</Label>
+              <Label for="title" sm={2}>Title*</Label>
               <Col sm={10}>
-                <Input type="text" name="title" id="title"/>
+                <Input type="text" name="title" id="title" onChange={this.checkIfEmpty}/>
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Label for="author" sm={2}>Author</Label>
+              <Label for="author" sm={2}>Author*</Label>
               <Col sm={10}>
-                <Input type="text" name="author" id="author"/>
+                <Input type="text" name="author" id="author" onChange={this.checkIfEmpty}/>
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Label for="body" sm={2}>Text</Label>
+              <Label for="body" sm={2}>Text*</Label>
               <Col sm={10}>
-                <Input type="textarea" name="body" id="body"/>
+                <Input type="textarea" name="body" id="body" onChange={this.checkIfEmpty}/>
+                <FormFeedback>*Required</FormFeedback>
+                {this.state.invalid && (
+                  <FormFeedback className="red">ERROR! Fill all the required inputs!</FormFeedback>
+                )} 
               </Col>
             </FormGroup>
             <FormGroup check row>
               <Col sm={{ size: 10, offset: 2 }}>
-                <Button onClick={() => closeNewPostModal()}>Close</Button>
+                <Button onClick={() => {
+                    closeNewPostModal()
+                    this.setState({invalid: false})
+                  }}>Close</Button>
                 <span>  </span>
                 <Button color="success">Submit</Button>
-              </Col>
+              </Col>              
             </FormGroup>
           </Form>
         </Modal>

@@ -6,3 +6,13 @@ export const showSortString = (s) => {
   else
     return "Score"
 }
+
+export const validateForm = (object) => {
+  let valid = true
+  for (const key in object) {
+    if (object[key] === null || object[key] === "" ) {
+      valid = false
+    }
+  }
+  return valid
+}

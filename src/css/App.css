@@ -15,6 +15,10 @@
   text-transform: capitalize;
 }
 
+.red {
+  color: red;
+}
+
 .overlay {
   position: fixed;
   top: 0px;
@@ -26,10 +30,10 @@
 
 .modal {
   position: absolute !important;
-  top: 180px!important;
+  top: 160px!important;
   left: 200px!important;
   right: 200px!important;
-  bottom: 180px!important;
+  bottom: 160px!important;
   border: 1px solid rgb(204, 204, 204)!important;
   background: rgb(255, 255, 255)!important;
   overflow: auto!important;
