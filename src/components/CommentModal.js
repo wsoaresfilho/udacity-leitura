@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Modal from 'react-modal'
 import UUID from 'uuid'
+import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap'
 import 
 {  
   sendNewCommentData,
@@ -72,14 +73,23 @@ class Comment extends Component {
           onRequestClose={closeEditCommentModal}
           contentLabel='commentEditModal'
         >
-          <p>Edit Comment</p>
-          <form onSubmit={this.submitEditCommentModal}>
-            <label>Comment</label>
-            <textarea name="body" defaultValue={comment.body}></textarea>
+          <Form onSubmit={this.submitEditCommentModal}>
+            <h4 className="center">Edit Comment</h4>
             <input type="hidden" name="id" value={comment.id}></input>
-            <button type="button" onClick={() => closeEditCommentModal()}>Close</button>
-            <button type="submit">Submit</button>
-          </form>
+            <FormGroup row>
+              <Label for="body" sm={2}>Comment</Label>
+              <Col sm={10}>
+                <Input type="textarea" name="body" id="body" defaultValue={comment.body}/>
+              </Col>
+            </FormGroup>
+            <FormGroup check row>
+              <Col sm={{ size: 10, offset: 2 }}>
+                <Button onClick={() => closeEditCommentModal()}>Close</Button>
+                <span>  </span>
+                <Button color="success">Submit</Button>
+              </Col>
+            </FormGroup>
+          </Form>
         </Modal>
 
         <Modal
@@ -89,18 +99,29 @@ class Comment extends Component {
           onRequestClose={closeNewCommentModal}
           contentLabel='commentNewModal'
         >
-          <p>New Comment</p>
-          <form onSubmit={this.submitNewCommentModal}>
-          
-            <label>Author</label>
-            <input type="text" name="author"></input>
-            <br/>
-            <label>Comment</label>
-            <textarea name="body"></textarea>
+          <Form onSubmit={this.submitNewCommentModal}>
+            <h4 className="center">New Comment</h4>
             <input type="hidden" name="parentId" value={post && post.id}></input>
-            <button type="button" onClick={() => closeNewCommentModal()}>Close</button>
-            <button type="submit">Submit</button>
-          </form>
+            <FormGroup row>
+              <Label for="author" sm={2}>Author</Label>
+              <Col sm={10}>
+                <Input type="text" name="author" id="author"/>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="body" sm={2}>Comment</Label>
+              <Col sm={10}>
+                <Input type="textarea" name="body" id="body"/>
+              </Col>
+            </FormGroup>
+            <FormGroup check row>
+              <Col sm={{ size: 10, offset: 2 }}>
+                <Button onClick={() => closeNewCommentModal()}>Close</Button>
+                <span>  </span>
+                <Button color="success">Submit</Button>
+              </Col>
+            </FormGroup>
+          </Form>
         </Modal>       
       </div>
     )

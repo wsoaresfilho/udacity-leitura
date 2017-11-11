@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchCategoriesData, selectCategory } from '../actions'
+import { Button, ButtonGroup } from 'reactstrap';
 
 class CategoryList extends Component {
   static propTypes = {
@@ -18,16 +19,17 @@ class CategoryList extends Component {
 
   render() {
     return (
-      <div>
-        <ul>  
+      <div className="center">
+        <h4>Categories:</h4>
+        <ButtonGroup vertical>
           {this.props.categories &&
-          this.props.categories.map((cat) => (
-            <li key={cat.name} className="capitalize" onClick={() => this.props.selectCategory(cat.name)}>
-              <Link to={`/${cat.path}`}>{cat.name}</Link>
-            </li>
+          this.props.categories.map((cat) => (              
+            <Button color="light" key={cat.name}>
+              <Link to={`/${cat.path}`} className="capitalize" onClick={() => this.props.selectCategory(cat.name)}>{cat.name}</Link>
+            </Button>              
           ))}
-        </ul>
-      </div>
+        </ButtonGroup>
+      </div>        
     )
   }
 }

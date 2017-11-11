@@ -6,6 +6,9 @@ import { VOTE_UP, VOTE_DOWN } from '../utilities/constants'
 import Comment from './Comment'
 import PostModal from './PostModal'
 import CommentModal from './CommentModal'
+import sortBy from 'sort-by'
+import { SORT_BY_DATE } from '../utilities/constants'
+import { ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Row, Col, ButtonGroup, Button } from 'reactstrap'
 import 
 {  
   fetchCommentsFromPostData,
@@ -53,23 +56,48 @@ class PostDetail extends Component {
       <div>
         {post.id && (
           <div>
+            <h4 className="center">Post Details</h4>
+            <ListGroup className="margin-bottom">
+              <ListGroupItem>
+                <ListGroupItemHeading>
+                  Post Title: <Link to={`/${post.category}/${post.id}`}>{post.title}</Link>
+                </ListGroupItemHeading>
+                <ListGroupItemText>
+                  <Row>
+                    <Col className="capitalize">Author: {post.author}</Col>
+                    <Col className="capitalize">Category: {post.category}</Col>
+                    <Col>Date: {new Date(post.timestamp).toLocaleDateString()}</Col>
+                    <Col>Comments: {post.commentCount}</Col>
+                  </Row>
+                  <Row>
+                    <Col>Text: {post.body}</Col>
+                  </Row>
+                  <br/>
+                  <Row className="center">
+                    <Col>
+                      <ButtonGroup>
+                        <Button color="danger" onClick={() => votePostDown(post.id)}>Vote Down</Button>
+                        <Button>Score: {post.voteScore}</Button>
+                        <Button color="success" onClick={() => votePostUp(post.id)}>Vote Up</Button>                    
+                      </ButtonGroup>
+                    </Col>
+                    <Col>
+                      <ButtonGroup>
+                        <Button color="danger" onClick={() => deletePost(post.id)}>Delete Post</Button>
+                        <Button color="warning" onClick={() => openPostModal(post)}>Edit Post</Button>
+                        <Button color="primary" onClick={() => this.newComment(post)}>New Comment</Button>
+                      </ButtonGroup>
+                    </Col>
+                  </Row>
+                </ListGroupItemText>
+              </ListGroupItem>
+            </ListGroup>
+
+            <br/> <br/>
             <div>
-              <p>Title: {post.title}</p>
-              <p>Category: {post.category}</p>
-              <p>Number of Comments: {post.commentCount}</p>
-              <p>Score: {post.voteScore}</p>
-              <p>Author: {post.author}</p>
-              <p>Body: {post.body}</p>
-              <button type="button" onClick={() => votePostUp(post.id)}>Vote Up</button>
-              <button type="button" onClick={() => votePostDown(post.id)}>Vote Down</button>
-              <button type="button" onClick={() => deletePost(post.id)}>Delete Post</button>
-              <button type="button" onClick={() => openPostModal(post)}>Edit Post</button>
-            </div>
-            <button type="button" onClick={() => this.newComment(post)}>New Comment</button>
-            <hr/>
-            <div>
+              <h4 className="center">Comments</h4>
               {comments && 
-                comments.map((comment) => (
+                comments.sort(sortBy(SORT_BY_DATE)).map((comment) => (
                   <Comment id={comment.id} key={comment.id}></Comment>
               ))}
             </div>

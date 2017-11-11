@@ -6,6 +6,7 @@ import Post from './Post'
 import { SORT_BY_DATE, SORT_BY_SCORE } from '../utilities/constants'
 import { showSortString } from '../utilities/helpers'
 import PostModal from './PostModal'
+import { Row, Col, Badge, Button } from 'reactstrap'
 import { 
   fetchPostsData,
   sortPosts
@@ -33,20 +34,41 @@ class Home extends Component {
 
     return (
       <div>
-        <CategoryList></CategoryList>
+        <Row>
+          <Col>
+            <CategoryList></CategoryList>
+          </Col>
+        </Row>
 
-        <p>Sorted by: {showSortString(sortby)}</p>
-        {sortby && sortby !== SORT_BY_DATE && (
-          <button type="button" onClick={() => this.sort(SORT_BY_DATE)}>Sort by Date</button>
-        )}
-        {sortby && sortby !== SORT_BY_SCORE && (
-          <button type="button" onClick={() => this.sort(SORT_BY_SCORE)}>Sort by Score</button>
-        )}
+        <hr/>
+        
+        <Row className="center">
+          <Col>
+          {sortby && sortby !== SORT_BY_DATE && (
+            <Button color="primary" onClick={() => this.sort(SORT_BY_DATE)}>Sort posts by Date</Button>
+          )}
+          {sortby && sortby !== SORT_BY_SCORE && (
+            <Button color="primary" onClick={() => this.sort(SORT_BY_SCORE)}>Sort posts by Score</Button>
+          )}
+        
+          <span>  </span>
+
+          <Button color="primary" outline>
+            Sorted by: <Badge color="secondary">{showSortString(sortby)}</Badge>
+          </Button>
+          </Col>
+        </Row>
+
+        <br/>
          
-        {posts &&
-          posts.map((post) => (
-            <Post id={post.id} key={post.id}></Post>
-        ))}
+        <Row>
+          <Col>
+            {posts &&
+              posts.map((post) => (
+                <Post id={post.id} key={post.id}></Post>
+            ))}
+          </Col>
+        </Row>
 
         <PostModal></PostModal>        
       </div>

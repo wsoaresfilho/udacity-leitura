@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-
+import { ListGroup, ListGroupItem, ListGroupItemHeading, Row, Col, ButtonGroup, Button } from 'reactstrap'
 import { 
   sendVotePostData, 
   sendDeletePostData,
@@ -32,18 +32,40 @@ class Post extends Component {
 
     return (
       <div>
-        <p>Title: <Link to={`/${post.category}/${post.id}`}>{post.title}</Link></p>
-        <p>Category: {post.category}</p>
-        <p>Number of Comments: {post.commentCount}</p>
-        <p>Score: {post.voteScore}</p>
-        <p>Author: {post.author}</p>
-        <p>Date: {new Date(post.timestamp).toLocaleDateString()}</p>
-        <button type="button" onClick={() => voteUp(post.id)}>Vote Up</button>
-        <button type="button" onClick={() => voteDown(post.id)}>Vote Down</button>
-        <button type="button" onClick={() => deletePost(post.id)}>Delete Post</button>
-        <button type="button" onClick={() => openPostModal(post)}>Edit Post</button>
-        <hr></hr>
-        
+        <ListGroup>
+          <ListGroupItem>
+            <ListGroupItemHeading>
+              Title: <Link to={`/${post.category}/${post.id}`}>{post.title}</Link>
+            </ListGroupItemHeading>
+            <div>
+              <Row>
+                <Col>Author: {post.author}</Col>
+                <Col>Category: {post.category}</Col>
+                <Col>Date: {new Date(post.timestamp).toLocaleDateString()}</Col>
+                <Col>Comments: {post.commentCount}</Col>
+              </Row>
+              <Row>
+                <Col>Text: {post.body}</Col>
+              </Row>
+              <br/>
+              <Row className="center">
+                <Col>
+                  <ButtonGroup>
+                    <Button color="danger" onClick={() => voteDown(post.id)}>Vote Down</Button>
+                    <Button>Score: {post.voteScore}</Button>
+                    <Button color="success" onClick={() => voteUp(post.id)}>Vote Up</Button>                    
+                  </ButtonGroup>
+                </Col>
+                <Col>
+                  <ButtonGroup>
+                    <Button color="danger" onClick={() => deletePost(post.id)}>Delete Post</Button>
+                    <Button color="warning" onClick={() => openPostModal(post)}>Edit Post</Button>
+                  </ButtonGroup>
+                </Col>
+              </Row>
+            </div>
+          </ListGroupItem>
+        </ListGroup>
       </div>
     )
   }

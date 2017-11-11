@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Modal from 'react-modal'
 import UUID from 'uuid'
+import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap'
 import { 
   closeEditPostModal,
   closeNewPostModal,
@@ -53,17 +54,29 @@ class PostModal extends Component {
           onRequestClose={closeEditPostModal}
           contentLabel='postEditModal'
         >
-          <p>Edit Post</p>
-          <form onSubmit={this.submitEditPostModal}>
-            <label>Title</label>
+          <Form onSubmit={this.submitEditPostModal}>
+            <h4 className="center">Edit Post</h4>
             <input type="hidden" name="id" value={post.id}></input>
-            <input type="text" name="title" defaultValue={post.title}></input>
-            <br/>
-            <label>Body</label>
-            <textarea name="body" defaultValue={post.body}></textarea>
-            <button type="button" onClick={() => closeEditPostModal()}>Close</button>
-            <button type="submit">Submit</button>
-          </form>
+            <FormGroup row>
+              <Label for="title" sm={2}>Title</Label>
+              <Col sm={10}>
+                <Input type="text" name="title" id="title" defaultValue={post.title}/>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="body" sm={2}>Text</Label>
+              <Col sm={10}>
+                <Input type="textarea" name="body" id="body" defaultValue={post.body}/>
+              </Col>
+            </FormGroup>
+            <FormGroup check row>
+              <Col sm={{ size: 10, offset: 2 }}>
+                <Button onClick={() => closeEditPostModal()}>Close</Button>
+                <span>  </span>
+                <Button color="success">Submit</Button>
+              </Col>
+            </FormGroup>
+          </Form>
         </Modal>
 
         <Modal
@@ -73,19 +86,34 @@ class PostModal extends Component {
           onRequestClose={closeNewPostModal}
           contentLabel='postNewModal'
         >
-          <p>New Post</p>
-          <form onSubmit={this.submitNewPostModal}>
-            <label>Title</label>
-            <input type="text" name="title"></input>
-            <br/>
-            <label>Author</label>
-            <input type="text" name="author"></input>
-            <br/>
-            <label>Body</label>
-            <textarea name="body"></textarea>
-            <button type="button" onClick={() => closeNewPostModal()}>Close</button>
-            <button type="submit">Submit</button>
-          </form>
+          <Form onSubmit={this.submitNewPostModal}>
+            <h4 className="center">New Post</h4>
+            <FormGroup row>
+              <Label for="title" sm={2}>Title</Label>
+              <Col sm={10}>
+                <Input type="text" name="title" id="title"/>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="author" sm={2}>Author</Label>
+              <Col sm={10}>
+                <Input type="text" name="author" id="author"/>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="body" sm={2}>Text</Label>
+              <Col sm={10}>
+                <Input type="textarea" name="body" id="body"/>
+              </Col>
+            </FormGroup>
+            <FormGroup check row>
+              <Col sm={{ size: 10, offset: 2 }}>
+                <Button onClick={() => closeNewPostModal()}>Close</Button>
+                <span>  </span>
+                <Button color="success">Submit</Button>
+              </Col>
+            </FormGroup>
+          </Form>
         </Modal>
       </div>
     )

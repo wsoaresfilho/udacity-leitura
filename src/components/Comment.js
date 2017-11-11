@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { VOTE_UP, VOTE_DOWN } from '../utilities/constants'
 import CommentModal from './CommentModal'
+import { ListGroup, ListGroupItem, ListGroupItemText, Row, Col, ButtonGroup, Button } from 'reactstrap'
 import 
 {  
   sendVoteCommentData,
@@ -34,16 +35,36 @@ class Comment extends Component {
     return (
       <div>
         {comment && (
-          <div>
-            <ul>
-              <li>Author: {comment.author}</li>
-              <li>Body: {comment.body}</li>
-              <li>Score: {comment.voteScore}</li>
-            </ul>
-            <button type="button" onClick={() => voteUp(comment.id)}>Vote Up</button>
-            <button type="button" onClick={() => voteDown(comment.id)}>Vote Down</button>
-            <button type="button" onClick={() => deleteComment(comment.id)}>Delete Comment</button>
-            <button type="button" onClick={() => openEditCommentModal(comment)}>Edit Comment</button>
+          <div>            
+            <ListGroup>
+              <ListGroupItem>
+                <ListGroupItemText>
+                  <Row>
+                    <Col className="capitalize">Author: {comment.author}</Col>
+                    <Col>Date: {new Date(comment.timestamp).toLocaleDateString()}</Col>
+                  </Row>
+                  <Row>
+                    <Col>Comment: {comment.body}</Col>
+                  </Row>
+                  <br/>
+                  <Row className="center">
+                    <Col>
+                      <ButtonGroup>
+                        <Button color="danger" onClick={() => voteDown(comment.id)}>Vote Down</Button>
+                        <Button>Score: {comment.voteScore}</Button>
+                        <Button color="success" onClick={() => voteUp(comment.id)}>Vote Up</Button>                    
+                      </ButtonGroup>
+                    </Col>
+                    <Col>
+                      <ButtonGroup>
+                        <Button color="danger" onClick={() => deleteComment(comment.id)}>Delete Post</Button>
+                        <Button color="warning" onClick={() => openEditCommentModal(comment)}>Edit Post</Button>
+                      </ButtonGroup>
+                    </Col>
+                  </Row>
+                </ListGroupItemText>
+              </ListGroupItem>
+            </ListGroup>
 
             <CommentModal></CommentModal>
           </div>
